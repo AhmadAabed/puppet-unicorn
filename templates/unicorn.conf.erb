@@ -16,7 +16,7 @@ worker_processes <%= worker_processes %>
 
 # Help ensure your application will always spawn in the symlinked
 # "current" directory that Capistrano sets up.
-working_directory "<%= basedir + '/current' %>"
+working_directory "<%= basedir %>"
 
 <% if socket_path then -%>
 # Unix domain socket
@@ -32,13 +32,13 @@ listen <%= port %>, :tcp_nopush => <%= tcp_nopush %>
 timeout <%= timeout_secs %>
 
 # Save the pid somewhere
-pid "<%= basedir + '/shared/pids/unicorn.pid' %>"
+pid  "/var/run/unicorn.pid"
 
 # By default, the Unicorn logger will write to stderr.
 # Additionally, ome applications/frameworks log to stderr or stdout,
 # so prevent them from going to /dev/null when daemonized here:
-stderr_path "<%= basedir + '/shared/log/unicorn.stderr.log' %>"
-stdout_path "<%= basedir + '/shared/log/unicorn.stdout.log' %>"
+stderr_path "/var/log/unicorn.stderr.log"
+stdout_path "/var/log/unicorn.stdout.log"
 
 <% if preload_app == true then -%>
 # combine REE with "preload_app true" for memory savings
