@@ -29,7 +29,7 @@ define unicorn::instance(
 
   file {
     "${name}_unicorn.conf":
-      path    => "${basedir}/shared/config/unicorn.conf.rb",
+      path    => "${basedir}/config/unicorn.conf.rb",
       mode    => 644,
       owner   => $uid,
       group   => $gid,
@@ -48,25 +48,20 @@ define unicorn::instance(
       default => "if failed host localhost port ${port}\n    protocol HTTP request \"/monit_test\"\n    with timeout ${timeout_secs}\n    then restart"
     }
 
-    monit::check::process {
-      "${process_name}_unicorn":
-        pidfile => "$basedir/shared/pids/unicorn.pid",
-        start   => "/bin/sh -c '$real_command -E $env -c $basedir/shared/config/unicorn.conf.rb -D'",
-        start_extras => "as uid $uid and gid $gid",
-        stop    => "/bin/sh -c 'kill `cat $basedir/shared/pids/unicorn.pid`'",
-        customlines => [$check_socket, $check_port, $monit_extras, "group ${process_name}_unicorn"];
-    }
+   
   }
+  
   else {
-    service {
-      "${process_name}_unicorn":
-        provider  => 'base',
-        start     => "$real_command -E $env -c $basedir/shared/config/unicorn.conf.rb -D",
-        stop      => "kill `cat $basedir/shared/pids/unicorn.pid`",
-        restart   => "kill -s USR2 `cat $basedir/shared/pids/unicorn.pid`",
-        status    => "ps -o pid= -o comm= -p `cat $basedir/shared/pids/unicorn.pid`",
-        ensure    => 'running',
-        subscribe => File["${name}_unicorn.conf"];
+
+# Configuring component service
+	supervisor::service{"salamweb":
+		ensure  => present,
+		enable  => true,
+		command => "$real_command -E $env -c $basedir/config/unicorn.conf.rb", 
+		directory => "/var/www/salamworld",
+		user	=> "salamweb",
+		group  	=> "salamweb",
+		require => Rvm_system_ruby['ruby-1.9.3-p392'],
     }
   }
 }
