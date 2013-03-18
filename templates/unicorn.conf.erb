@@ -32,7 +32,7 @@ listen <%= port %>, :tcp_nopush => <%= tcp_nopush %>
 timeout <%= timeout_secs %>
 
 # Save the pid somewhere
-pid  "/var/run/unicorn.pid"
+pid  "/tmp/unicorn.pid"
 
 # By default, the Unicorn logger will write to stderr.
 # Additionally, ome applications/frameworks log to stderr or stdout,
