@@ -37,8 +37,9 @@ pid  "/var/run/unicorn.pid"
 # By default, the Unicorn logger will write to stderr.
 # Additionally, ome applications/frameworks log to stderr or stdout,
 # so prevent them from going to /dev/null when daemonized here:
-stderr_path "/var/log/unicorn.stderr.log"
-stdout_path "/var/log/unicorn.stdout.log"
+
+stderr_path "<%= stderr_path %>"
+stdout_path "<%= stdlog_path %>"
 
 <% if preload_app == true then -%>
 # combine REE with "preload_app true" for memory savings

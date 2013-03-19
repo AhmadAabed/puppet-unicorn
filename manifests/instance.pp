@@ -19,6 +19,8 @@ define unicorn::instance(
   $env = 'production',
   $uid = 'root',
   $gid = 'root',
+  $stderr_path='/var/log/unicorn.err',
+  $stdlog_path='/var/log/unicorn.log',
   $monit_extras = ''
 ) {
 
