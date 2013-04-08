@@ -56,14 +56,14 @@ define unicorn::instance(
   else {
 
 # Configuring component service
-	supervisor::service{"salamweb":
+	supervisor::service{"${name}":
 		ensure  => present,
 		enable  => true,
 		command => "$real_command -E $env -c $basedir/config/unicorn.conf.rb", 
 		directory => "/var/www/salamweb",
-		user	=> "salamweb",
-		group  	=> "salamweb",
-		require => Rvm_system_ruby['ruby-1.9.3-p392'],
+		user	=> "${name}",
+		group  	=> "${name}",
+		environment => 'HOME=/var/www/salamweb',
     }
   }
 }
